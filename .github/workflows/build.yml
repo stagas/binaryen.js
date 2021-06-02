@@ -93,6 +93,18 @@ jobs:
     - name: "Test binaryen.wasm"
       run: |
         node ./tests/sanity --wasm
+    - name: "Build binaryen.wasm ESM"
+      run: |
+        cd ./binaryen/build
+        source $HOME/emsdk/emsdk_env.sh
+        emcc --version
+        emcmake cmake .. -DCMAKE_BUILD_TYPE=Release
+        emmake make -j2 binaryen_wasm_esm
+        cp ./bin/binaryen_wasm_esm.js ../../wasm_esm.mjs
+        cd ../..
+    - name: "Test binaryen.wasm esm"
+      run: |
+        node ./tests/sanity.mjs
     - name: "Build wasm-opt"
       run: |
         cd ./binaryen/build
